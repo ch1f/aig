@@ -1,4 +1,5 @@
 = AIG - auto-increment generator
+
 Auto-increment generator based on mongodb database.
 Has backwards compatibility with https://github.com/night-codes/mgo-ai package.
 The option to connect `OpenTelemetry` is available.
