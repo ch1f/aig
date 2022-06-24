@@ -25,7 +25,7 @@ The name of the collection where data about increment will be stored, required.
 [source,go]
 ----
 
-    // Getting data from env
+	// Getting data from env
 	aigCfg, _ := aig.GetConfigEnv()
 	// or you can specify them from another source
 	aigCfg := &aig.MongoConfig{
@@ -39,10 +39,10 @@ The name of the collection where data about increment will be stored, required.
 
 	aigModule := aig.Create(ctx, aigCfg, aigOpts)
 
-    //So, you can start using incrementation according to method that is backward compatible with mgo-ai
-    someID := aigModule.Next("some")
+	//So, you can start using incrementation according to method that is backward compatible with mgo-ai
+	someID := aigModule.Next("some")
 
-    //or use new one with tracing
-    someID := aigModule.Generate(ctx, "some")
+	//or use new one with tracing
+	someID := aigModule.Generate(ctx, "some")
 
 ----
