@@ -5,19 +5,19 @@ The option to connect `OpenTelemetry` is available.
 
 == ENV
 
-AIG_MONGO_URI   `type`: string
+.AIG_MONGO_URI   `type`: string
 URI for connecting to MongoDB, required.
 
-AIG_MONGO_USER   `type`: string
+.AIG_MONGO_USER   `type`: string
 Credentials for connecting to mongodb.
 
-AIG_MONGO_PASSWORD   `type`: string
+.AIG_MONGO_PASSWORD   `type`: string
 Credentials for connecting to mongodb.
 
-AIG_MONGO_DB   `type`: string
+.AIG_MONGO_DB   `type`: string
 The name of the database where data about increment will be stored, required.
 
-AIG_MONGO_COLLECTION   `type`: string
+.AIG_MONGO_COLLECTION   `type`: string
 The name of the collection where data about increment will be stored, required.
 
 == Connection example
@@ -25,24 +25,25 @@ The name of the collection where data about increment will be stored, required.
 [source,go]
 ----
 
-	// Getting data from env
-	aigCfg, _ := aig.GetConfigEnv()
-	// or you can specify them from another source
-	aigCfg := &aig.MongoConfig{
-		URI:        "mongodb://127.0.0.1:27017",
-		DB:         "generator",
-		Collection: "ai",
-	}
+// Getting data from env
+aigCfg, _ := aig.GetConfigEnv()
+// or you can specify them from another source
+aigCfg := &aig.MongoConfig{
+	URI:        "mongodb://127.0.0.1:27017",
+	DB:         "generator",
+	Collection: "ai",
+}
 
-	// Connecting the mongodb trace to OpenTelemtry
-	aigOpts := aig.Settings().EnableOtel()
+// Connecting the mongodb trace to OpenTelemtry
+aigOpts := aig.Settings().EnableOtel()
 
-	aigModule := aig.Create(ctx, aigCfg, aigOpts)
+// Creating a module. If there is an error connecting to the database, panic will be used inside.
+aigModule := aig.Create(ctx, aigCfg, aigOpts)
 
-	//So, you can start using incrementation according to method that is backward compatible with mgo-ai
-	someID := aigModule.Next("some")
+//So, you can start using incrementation according to method that is backward compatible with mgo-ai
+someID := aigModule.Next("some")
 
-	//or use new one with tracing
-	someID := aigModule.Generate(ctx, "some")
+//or use new one with tracing
+someID := aigModule.Generate(ctx, "some")
 
 ----
