@@ -1,6 +1,5 @@
-= AIG - auto-increment generator
+= AIG - auto-increment generator based on MongoDB
 
-Auto-increment generator based on mongodb database.
 Has backwards compatibility with https://github.com/night-codes/mgo-ai package.
 The option to connect `OpenTelemetry` is available.
 
@@ -26,20 +25,23 @@ The name of the collection where data about increment will be stored, required.
 [source,go]
 ----
 
+import( 
+	"github.com/ch1f/aig"
+	"go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/mongo/otelmongo"
+)
+
 // Getting data from env
-aigCfg, _ := aig.GetConfigEnv()
-// or you can specify them from another source
-aigCfg := &aig.MongoConfig{
-	URI:        "mongodb://127.0.0.1:27017",
-	DB:         "generator",
-	Collection: "ai",
-}
+aigCfg := aig.GetConfigEnv()
+// also you can specify them from another source
+aigCfg.DB = "aig"
+aigCfg.Collection = "aig"
+
 
 // Connecting the mongodb trace to OpenTelemtry
-aigOpts := aig.Settings().EnableOtel()
+aigCfg.Monitor = otelmongo.NewMonitor()
 
 // Creating a module. If there is an error connecting to the database, panic will be used inside.
-aigModule := aig.Create(ctx, aigCfg, aigOpts)
+aigModule := aig.Create(ctx, aigCfg)
 
 //So, you can start using incrementation according to method that is backward compatible with mgo-ai
 someID := aigModule.Next("some")

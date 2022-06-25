@@ -13,11 +13,8 @@ type Suite struct {
 }
 
 func (s *Suite) SetupSuite() {
-	aiM := Create(context.Background(), &MongoConfig{
-		URI:        "mongodb://127.0.0.1:27017",
-		DB:         "testAI",
-		Collection: "ai",
-	})
+	cfg := GetConfigEnv()
+	aiM := Create(context.Background(), cfg)
 
 	s.repo = aiM
 }

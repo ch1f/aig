@@ -7,7 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/writeconcern"
-	"go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/mongo/otelmongo"
 )
 
 type AI struct {
@@ -21,22 +20,22 @@ type counter struct {
 
 const timeout = time.Second * 10
 
-func Create(ctx context.Context, cfg *MongoConfig, opts ...*SettingOptions) *AI {
+func Create(ctx context.Context, cfg MongoConfig) *AI {
 	clientOpts := options.Client().ApplyURI(cfg.URI).
 		SetWriteConcern(writeconcern.New(
 			writeconcern.WTimeout(timeout),
 			writeconcern.J(false),
 		)).SetRetryWrites(false)
 
-	//set options
-	for _, opt := range opts {
-		if opt == nil {
-			continue
-		}
+	if cfg.User != "" && cfg.Password != "" {
+		clientOpts.SetAuth(options.Credential{
+			Username: cfg.User,
+			Password: cfg.Password,
+		})
+	}
 
-		if opt.Otel != nil {
-			clientOpts.Monitor = otelmongo.NewMonitor()
-		}
+	if cfg.Monitor != nil {
+		clientOpts.Monitor = cfg.Monitor
 	}
 
 	client, err := mongo.Connect(ctx, clientOpts)
