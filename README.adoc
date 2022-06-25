@@ -25,7 +25,7 @@ The name of the collection where data about increment will be stored, required.
 [source,go]
 ----
 
-import( 
+import ( 
 	"github.com/ch1f/aig"
 	"go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/mongo/otelmongo"
 )
@@ -35,7 +35,6 @@ aigCfg := aig.GetConfigEnv()
 // also you can specify them from another source
 aigCfg.DB = "aig"
 aigCfg.Collection = "aig"
-
 
 // Connecting the mongodb trace to OpenTelemtry
 aigCfg.Monitor = otelmongo.NewMonitor()
